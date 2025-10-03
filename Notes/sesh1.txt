@@ -1,0 +1,6 @@
+cd c/Users/michi/zephyr-projects
+source .venv/Scripts/activate
+cd c/Users/michi/zephyr-projects//eie_nrf52840.git
+
+legacy driver Jlink installer
+west flash --recover
