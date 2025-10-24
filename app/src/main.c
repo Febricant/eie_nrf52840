@@ -8,6 +8,7 @@
 
 #include "BTN.h"
 #include "LED.h"
+#include "my_state_machine.h"
 
 #define SLEEP_MS 1
 
@@ -20,36 +21,16 @@ int main(void) {
     return 0;
   }
 
-  while(1) {
-    k_msleep(SLEEP_MS);
-  }
-	return 0;
-}
+    state_machine_init();
 
+    while (1) {
+        int ret = state_machine_run();
+        if (ret < 0) {
+            return 0;
+        }
 
-int main(void) {
-    int ret;
-
-    if (!gpio_is_ready_dt(&button)) {
-        return 0;
+        k_msleep(SLEEP_MS);
     }
 
-    ret = gpio_pin_configure_dt(&button, GPIO_INPUT);
-    if (0 > ret) {
-        return 0;
-    }
-
-    ret = gpio_pin_interrupt_configure_dt(&button, GPIO_INT_EDGE_TO_ACTIVE);
-    if (0 > ret) {
-        return 0;
-    }
-
-    gpio_init_callback(&button_isr_data, button_isr, BIT(button.pin));
-    gpio_add_callback(button.port, &button_isr_data);
-
-    while(1) {
-
-    }
-
-    return 0;
+  return 0;
 }
