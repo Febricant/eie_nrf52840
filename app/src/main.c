@@ -1,26 +1,29 @@
 
+#include <inttypes.h>
 
 #include <zephyr/kernel.h>
 #include <zephyr/device.h>
 #include <zephyr/drivers/gpio.h>
 #include <zephyr/sys/printk.h>
-#include <inttypes.h>
 
-int i = 0;
+#include "BTN.h"
+#include "LED.h"
 
-#define SW0_NODE DT_ALIAS(sw0)
-static const struct gpio_dt_spec button = GPIO_DT_SPEC_GET(SW0_NODE, gpios);
+#define SLEEP_MS 1
 
-static struct gpio_callback button_isr_data;
+int main(void) {
 
-void button_isr(const struct device *dev, struct gpio_callback *cb, uint32_t pins) {
-    i++;
-    printf("%d\n", pins);
-    if (i != 67)
-        printf("Button 1 Pressed %d times\n", i);
-    else if (i == 67 ) {
-        printf("67 MASON, MASSIVE, NINJA\n");
-    }
+  if (0 > BTN_init()) {
+    return 0;
+  }
+  if (0 > LED_init()) {
+    return 0;
+  }
+
+  while(1) {
+    k_msleep(SLEEP_MS);
+  }
+	return 0;
 }
 
 
